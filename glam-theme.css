@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
 :root{--gold:#b08a4a;--gold-2:#c7a15b;--burgundy:#641f2a;--burgundy-deep:#4f1821;--black:#10100f;--paper:#f6f1e8;--cream:#fbf8f2}
 /* GLAM launch palette — restrained gold, burgundy and black */
 .top{background:var(--burgundy-deep);color:#f1e5d4;border-bottom:1px solid #d5ad642d}
@@ -16,4 +17,18 @@ footer{border-top:1px solid #b08a4a30}.foot .brand{color:#f4eee5}
 .modal .ey{color:var(--gold)}.modal .big{color:var(--burgundy-deep)}.variant-block select:focus{outline:none;border-color:var(--gold)}
 /* Toast from UX layer */
 #glam-toast,.glam-toast{border-left:3px solid var(--gold)!important;box-shadow:0 16px 38px #31101522!important}.glam-toast strong,#glam-toast strong{color:var(--burgundy)!important}
+/* Modern GLAM typography — Sora + Manrope */
+body,button,input,select,.top,.ey,.meta,.sku,.price,.notice,.head2 p,.count,.contact,.foot,.checkout-label,.delivery-option,.invoice-toggle,.detail,.modal-note,.form-note{font-family:Manrope,Arial,sans-serif}
+.brand,h1,h2,h3,h4,.ph,.lg b,.section-head b,.ci h4,.total,.big,.mc h2{font-family:Sora,Manrope,Arial,sans-serif;font-style:normal}
+.brand{font-weight:600;letter-spacing:.19em}
+h1,h2,h3,h4{font-weight:500;letter-spacing:-.035em}
+.hero h1{font-weight:500;letter-spacing:-.055em;line-height:.9}
+.hero h1 em{font-style:normal;font-weight:500}
+.head2 h2,.logi h2{font-weight:500;letter-spacing:-.045em}
+.row h3{font-weight:500;line-height:1.25;letter-spacing:-.025em}
+.ph{font-weight:400;letter-spacing:-.015em}
+.lg b{font-weight:500;letter-spacing:-.025em}
+.section-head b,.ci h4{font-weight:500;letter-spacing:-.02em}
+.total,.big{font-weight:500;letter-spacing:-.025em}
+.mc h2{font-weight:500;letter-spacing:-.04em}
 @media(max-width:520px){.hero:after{left:20px;right:20px}.head2 h2:after{width:44px}.card:hover{transform:none}}
