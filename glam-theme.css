@@ -1,0 +1,19 @@
+:root{--gold:#b08a4a;--gold-2:#c7a15b;--burgundy:#641f2a;--burgundy-deep:#4f1821;--black:#10100f;--paper:#f6f1e8;--cream:#fbf8f2}
+/* GLAM launch palette — restrained gold, burgundy and black */
+.top{background:var(--burgundy-deep);color:#f1e5d4;border-bottom:1px solid #d5ad642d}
+header{background:#f6f1e8f2}.brand{color:var(--black)}.brand small{color:var(--gold)}
+.pill{border-color:#b08a4a55;transition:.2s}.pill:hover{background:var(--black);color:#fff;border-color:var(--black)}.pill #n,#n{color:var(--burgundy);font-weight:700}
+.hero{position:relative;background:var(--black);overflow:hidden}.hero:after{content:"";position:absolute;left:max(20px,7vw);right:max(20px,7vw);bottom:0;height:1px;background:linear-gradient(90deg,var(--gold),transparent 65%);opacity:.8}.hero .ey{color:var(--gold-2)}.hero h1 em{color:var(--gold-2)}.hero p{color:#c7beb1}
+.notice{background:#efe7da;border-color:#b08a4a38;border-left:3px solid var(--burgundy);color:#443b33}.head2 .ey,.meta,.sku{color:var(--gold)}.head2 h2{position:relative}.head2 h2:after{content:"";display:block;width:58px;height:2px;background:var(--burgundy);margin-top:14px}
+.f{transition:.2s;background:#fff8}.f:hover{border-color:#b08a4a66}.f:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.card{position:relative;transition:transform .22s ease}.card:hover{transform:translateY(-3px)}.pic{position:relative;transition:.25s;box-shadow:0 0 0 1px transparent}.card:hover .pic{box-shadow:0 12px 28px #36151a13,0 0 0 1px #b08a4a45}.pic:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--burgundy),var(--gold));transform:scaleX(0);transform-origin:left;transition:.25s}.card:hover .pic:after{transform:scaleX(1)}
+.price{color:var(--burgundy-deep);font-weight:700}.add{background:var(--black);border-color:var(--black);transition:.2s}.add:hover{background:var(--burgundy);border-color:var(--burgundy)}.view{transition:.2s}.view:hover{border-color:var(--gold);color:var(--burgundy)}
+.logistics{background:var(--black)}.logistics .ey{color:var(--gold-2)}.lg{border-color:#c7a15b2a;background:#c7a15b2a}.lg article{background:#11110f;position:relative}.lg article:before{content:"";position:absolute;top:0;left:0;width:32px;height:2px;background:var(--gold)}.lg article:nth-child(2):before{background:var(--burgundy)}.lg b{color:#f6ecdd}.contact a{color:var(--gold-2)}.contact a:hover{color:#fff}
+footer{border-top:1px solid #b08a4a30}.foot .brand{color:#f4eee5}
+/* Cart */
+.cart-kicker,.section-head>span{color:var(--gold);border-color:#b08a4a88}.delivery-option:has(input:checked),.invoice-toggle:has(input:checked){border-color:var(--gold);background:#efe4d3;box-shadow:inset 3px 0 0 var(--burgundy)}.checkout-input:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}.total b{color:var(--burgundy-deep)}.wa{background:var(--black);transition:.2s}.wa:hover{background:var(--burgundy)}
+/* Product modal */
+.modal .ey{color:var(--gold)}.modal .big{color:var(--burgundy-deep)}.variant-block select:focus{outline:none;border-color:var(--gold)}
+/* Toast from UX layer */
+#glam-toast,.glam-toast{border-left:3px solid var(--gold)!important;box-shadow:0 16px 38px #31101522!important}.glam-toast strong,#glam-toast strong{color:var(--burgundy)!important}
+@media(max-width:520px){.hero:after{left:20px;right:20px}.head2 h2:after{width:44px}.card:hover{transform:none}}
