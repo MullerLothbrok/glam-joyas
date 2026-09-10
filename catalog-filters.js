@@ -60,7 +60,7 @@
 
   function priceMatches(p,min,max){
     const members=G(p);
-    const prices=(members.length?members:[p]).map(x=>Number(x.price)||0);
+    const prices=(members.length?members:[p]).map(x=>sale(x)||0);
     return prices.some(price=>(!min||price>=min)&&(!max||price<=max));
   }
 
