@@ -1,0 +1,24 @@
+[hidden]{display:none!important}
+.launch-offer strong [data-promotion-number]{font-size:inherit;letter-spacing:inherit}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;left:16px;top:-100px;z-index:200;background:#fff;color:#4f1821;padding:14px;font-size:16px}
+.skip-link:focus{top:12px}
+:focus-visible{outline:3px solid #641f2a;outline-offset:3px}
+.pic{width:100%;padding:0;border:0;font:inherit;color:inherit}
+.pic:focus-visible{outline-offset:4px}
+.q button,.ci>.x,.x{min-width:44px;min-height:44px}
+.q{gap:8px}.q span{font-size:14px}.q button{font-size:18px}
+.ci{grid-template-columns:60px minmax(0,1fr) 44px;gap:8px}
+.ci img{width:60px;height:74px}.ci h4{overflow-wrap:anywhere}
+.checkout-input{font-size:16px}.checkout-label,.form-note,.delivery-option small,.invoice-toggle small,.section-head small,.modal-note,.optional{font-size:12px;line-height:1.5}
+.delivery-option b,.invoice-toggle b{font-size:14px}
+.add,.wa,.view,.pill,.cart-toast button{min-height:44px;font-size:11px}
+.cart-toast button{font-size:12px}.toast-copy small{font-size:12px}
+.cart-notice:empty{display:none}.cart-notice{padding:12px;background:#eee3d2;color:#4f1821;font-size:14px;line-height:1.5;border:1px solid #b08a4a}
+.empty-cart,.empty-results{padding:24px 10px;color:#554b41;font-size:14px;line-height:1.6}
+.empty-results{grid-column:1/-1}
+button:disabled{opacity:.55;cursor:not-allowed}
+.draw .cart-scroll{min-height:80px}.draw .cart-footer{max-height:45dvh;overflow:auto}
+.meta,.sku{color:#786033}.notice{font-size:13px}.detail div{font-size:12px}
+@media(max-width:520px){.ci{grid-template-columns:48px minmax(0,1fr) 44px}.ci img{width:48px;height:64px}.ci h4{font-size:14px}.cart-footer .form-note{font-size:11px}.total span{font-size:15px}.cart-footer{padding-bottom:max(16px,env(safe-area-inset-bottom))}.promotion-summary{font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
