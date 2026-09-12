@@ -1,0 +1,15 @@
+.git
+.env*
+node_modules
+tests
+tools
+README.md
+package.json
+package-lock.json
+typography-preview.html
+redeploy-checkout-v2.txt
+launch
+batch-2026-09-09b.js
+catalog-corrections.js
+catalog-launch.js
+groups.js

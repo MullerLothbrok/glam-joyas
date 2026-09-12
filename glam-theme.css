@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
 :root{--gold:#b08a4a;--gold-2:#c7a15b;--burgundy:#641f2a;--burgundy-deep:#4f1821;--black:#10100f;--paper:#f6f1e8;--cream:#fbf8f2}
 /* GLAM launch palette — restrained gold, burgundy and black */
 .top{background:var(--burgundy-deep);color:#f1e5d4;border-bottom:1px solid #d5ad642d}

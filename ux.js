@@ -1,2 +1,13 @@
-function showAdded(p,v=''){let t=document.querySelector('#cartToast');if(!t){t=document.createElement('div');t.id='cartToast';t.className='cart-toast';t.innerHTML='<div class="toast-check">✓</div><div class="toast-copy"><b></b><small></small></div><button type="button">Ver carrito</button>';document.body.appendChild(t);t.querySelector('button').onclick=()=>{t.classList.remove('on');openD()}}t.querySelector('b').textContent='Agregado al carrito';t.querySelector('small').textContent=p.name+(v?' · '+v:'');t.classList.remove('on');requestAnimationFrame(()=>t.classList.add('on'));clearTimeout(window.__glamToastTimer);window.__glamToastTimer=setTimeout(()=>t.classList.remove('on'),2800)}
-add=function(p,v=''){let k=key(p,v);cart[k]=(cart[k]||0)+1;save();closeM();showAdded(p,v)};
+function showAdded(product, variant = '') {
+  let toast = document.querySelector('#cartToast');
+  if (!toast) {
+    toast = document.createElement('div'); toast.id = 'cartToast'; toast.className = 'cart-toast';
+    toast.innerHTML = '<div class="toast-check" aria-hidden="true">✓</div><div class="toast-copy"><b>Agregado al carrito</b><small></small></div><button type="button">Ver carrito</button>';
+    document.body.append(toast); toast.querySelector('button').onclick = () => openD();
+  }
+  toast.querySelector('small').textContent = product.name + (variant ? ' · ' + variant : '');
+  toast.inert = false; toast.classList.add('on');
+  announce('Agregado al carrito: ' + product.name + (variant ? ', ' + variant : ''));
+  clearTimeout(window.__glamToastTimer);
+  window.__glamToastTimer = setTimeout(() => {toast.classList.remove('on'); toast.inert = true;}, 3500);
+}
