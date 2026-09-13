@@ -16,5 +16,5 @@ test('catalog data is unique and every image variant exists locally',()=>{
 });
 test('preview and developer files are excluded from deployment',()=>{
   const ignore=read('.vercelignore');for(const item of ['typography-preview.html','tests','tools','.env*'])assert.ok(ignore.includes(item));
-  assert.match(read('robots.txt'),/Sitemap: https:\/\/glam-joyas.vercel.app\/sitemap.xml/);assert.match(read('sitemap.xml'),/<loc>https:\/\/glam-joyas.vercel.app\/informacion<\/loc>/);
+  assert.match(read('robots.txt'),/Sitemap: https:\/\/glamjoyas.store\/sitemap.xml/);assert.match(read('sitemap.xml'),/<loc>https:\/\/glamjoyas.store\/informacion<\/loc>/);
 });
