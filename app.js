@@ -90,7 +90,7 @@ function filt() {
 }
 function priceLabel(product, exact = false) {
   const grouped = !exact && G(product).length, base = grouped ? groupMin(product) : product.price;
-  return (grouped ? 'Desde ' : '') + `<span class="sale-price">${M(sale({price:base}))}</span> <del>${M(base)}</del>`;
+  return (grouped || product.consultOnly ? 'Desde ' : '') + `<span class="sale-price">${M(sale({price:base}))}</span> <del>${M(base)}</del>`;
 }
 function cleanGroupName(product, member) {
   if (product.sku === 'GJ-W033A' && member.sku === product.sku) return 'Snake';
@@ -105,13 +105,13 @@ function render() {
   Q('#count').textContent = products.length + (products.length === 1 ? ' pieza' : ' piezas');
   Q('#grid').innerHTML = products.map(product => {
     const grouped = G(product).length, choices = grouped || V(product).length;
-    return `<article class="card"><button class="pic" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">${imageTag(product.image,product.name)}</button><div class="meta">${escapeHTML(product.category)}</div><div class="row"><h3>${escapeHTML(product.name)}</h3><div class="price">${priceLabel(product)}</div></div><div class="sku">${choices ? choices + (grouped ? ' modelos · ' : ' opciones · ') : escapeHTML(product.sku)}${escapeHTML(optionLabel(product))}</div><div class="buttons"><button class="add" data-add="${escapeHTML(product.sku)}">${choices ? 'Elegir opción' : 'Agregar al carrito'}</button><button class="view" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">Ver</button></div></article>`;
+    return `<article class="card"><button class="pic" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">${imageTag(product.image,product.name)}</button><div class="meta">${escapeHTML(product.category)}</div><div class="row"><h3>${escapeHTML(product.name)}</h3><div class="price">${priceLabel(product)}</div></div><div class="sku">${choices ? choices + (grouped ? ' modelos · ' : ' opciones · ') : escapeHTML(product.sku)}${escapeHTML(optionLabel(product))}</div>${product.priceNote ? `<p class="price-note">${escapeHTML(product.priceNote)}</p>` : ''}<div class="buttons"><button class="add" data-add="${escapeHTML(product.sku)}">${product.consultOnly ? 'Consultar tamaños' : choices ? 'Elegir opción' : 'Agregar al carrito'}</button><button class="view" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">Ver</button></div></article>`;
   }).join('') || '<p class="empty-results">No encontramos piezas con esos filtros. Probá otra búsqueda.</p>';
 }
 function quickAdd(sku) {
   const product = P.find(p => p.sku === sku);
   if (!product) return;
-  if (G(product).length || V(product).length) return detail(sku);
+  if (product.consultOnly || G(product).length || V(product).length) return detail(sku);
   add(product);
 }
 function setGroupChoice(product) {
@@ -139,24 +139,42 @@ function detail(sku) {
     Q('#ma').onclick = () => add(active, variants.length ? select.value : '');
   }
   if (active.stoneCollection) setupStones(active);
+  Q('#ma').hidden = !!active.consultOnly;
+  Q('#productInquiry').hidden = !active.consultOnly;
+  Q('#productInquiry').href = 'https://wa.me/' + config.whatsapp + '?text=' + encodeURIComponent('Hola Glam Joyas, quisiera consultar disponibilidad y precio de cada tamaño de ' + active.name + ' (' + active.sku + '). ¿Me ayudan a elegir?');
+  Q('.modal-note').textContent = active.priceNote || 'La pieza se agregará y volverás al catálogo para seguir explorando.';
   setPanel(Q('#m')); Q('#m').scrollTop = 0;
 }
 function setupStones(collection) {
   const block = document.createElement('div'); block.id = 'stoneColorBlock'; block.className = 'variant-block';
   block.innerHTML = '<label for="stoneColor">Elegí el color</label><select id="stoneColor">' + collection.colors.map(c => `<option>${escapeHTML(c)}</option>`).join('') + '</select>';
   Q('#vb').before(block); Q('#vb label').textContent = 'Elegí la pieza';
+  const available = () => G(collection).filter(p => V(p).includes(Q('#stoneColor').value));
+  const setPrice = () => available().reduce((sum, p) => sum + sale(p), 0);
   function choosePiece() {
-    const product = P.find(p => p.sku === Q('#v').value); setGroupChoice(product);
+    if (Q('#v').value === 'complete-set') {
+      const base = available().reduce((sum, p) => sum + p.price, 0);
+      setGroupChoice({...collection, price:base});
+      Q('#mpr').innerHTML = `<span class="sale-price">${M(setPrice())}</span> <del>${M(base)}</del>`;
+      Q('#msku').textContent = available().map(p => p.sku).join(' + ');
+    } else setGroupChoice(P.find(p => p.sku === Q('#v').value));
     Q('#mp').innerHTML = imageTag(collection.colorPhotos[Q('#stoneColor').value], 'Colección de piedras · ' + Q('#stoneColor').value, '(max-width: 850px) 100vw, 50vw', false);
   }
   function chooseColor() {
     const color = Q('#stoneColor').value, previous = Q('#v').value;
     Q('#v').innerHTML = G(collection).filter(p => V(p).includes(color)).map(p => `<option value="${escapeHTML(p.sku)}">${escapeHTML(p.name)} — ${M(sale(p))}</option>`).join('');
+    if (available().length === 3) Q('#v').insertAdjacentHTML('beforeend', `<option value="complete-set">Colección completa · 3 piezas — ${M(setPrice())}</option>`);
     if ([...Q('#v').options].some(option => option.value === previous)) Q('#v').value = previous;
     choosePiece();
   }
   Q('#stoneColor').onchange = chooseColor; Q('#v').onchange = choosePiece;
-  Q('#ma').onclick = () => add(P.find(p => p.sku === Q('#v').value), Q('#stoneColor').value); chooseColor();
+  Q('#ma').onclick = () => {
+    const color = Q('#stoneColor').value;
+    if (Q('#v').value !== 'complete-set') return add(P.find(p => p.sku === Q('#v').value), color);
+    const next = core.addSet(cart, available(), color, P, config.maxQuantity);
+    if (!next) return announce('No pudimos agregar la colección completa: revisá las cantidades del carrito o consultanos por WhatsApp.');
+    cart = next; save(); closeM(); showAdded({name:'Colección completa · 3 piezas'}, color);
+  }; chooseColor();
 }
 function draw() {
   const summary = core.summarize(cart, P, config.promotionRate, config.maxQuantity);
@@ -202,6 +220,6 @@ Q('#s').oninput = () => render(); Q('#c').onchange = () => render(); Q('#sort').
 Q('#bag').onclick = openD; Q('#xd').onclick = closeD; Q('#xm').onclick = closeM; Q('#o').onclick = closeAll; Q('#wa').onclick = checkout;
 Q('#invoice').onchange = event => {Q('#invoiceFields').classList.toggle('on',event.target.checked); Q('#invoiceFields').hidden = !event.target.checked;};
 document.querySelectorAll('[data-promotion-percent]').forEach(element => {element.textContent = percent + '%';});
-document.querySelectorAll('[data-whatsapp]').forEach(element => {element.href = 'https://wa.me/' + config.whatsapp;});
+document.querySelectorAll('[data-whatsapp]').forEach(element => {element.href = 'https://wa.me/' + config.whatsapp + (element.dataset.message ? '?text=' + encodeURIComponent(element.dataset.message) : '');});
 render(); draw();
 if (initial.recovered) announce('Actualizamos tu carrito: se quitaron opciones antiguas o datos no válidos. Revisá tu selección antes de continuar.');

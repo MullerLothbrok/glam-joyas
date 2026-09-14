@@ -2,4 +2,5 @@
 
 .help-links{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 24px;padding:0 14px 12px}.help-links a{font-size:11px;color:#64232d;text-underline-offset:4px}@media(max-width:500px){.help-links{gap:8px 17px}.help-links a{font-size:10px}}
 .map-box{position:relative}.map-box iframe{position:absolute;inset:0}.map-cover a{display:inline-block;color:#64232d;padding:12px;text-underline-offset:4px}#local{scroll-margin-top:110px}
+.catalog-help{max-width:1100px;margin:36px auto;padding:28px 20px;text-align:center;border-block:1px solid #d9cdbd}.catalog-help h2{font-size:clamp(24px,4vw,36px);margin:0 0 12px}.catalog-help p{line-height:1.6}.help-link{display:inline-block;padding:16px 22px;background:#64232d;color:#fff;text-decoration:none;text-align:center;line-height:1.5;max-width:100%;box-sizing:border-box}.help-link:hover{background:#461820}.help-link:focus-visible{outline:3px solid #aa793c;outline-offset:4px}.help-link[hidden],#ma[hidden]{display:none!important}.price-note{font-size:12px;line-height:1.6;color:#64232d}
 

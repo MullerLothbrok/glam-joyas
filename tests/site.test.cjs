@@ -10,7 +10,7 @@ test('page resources, metadata and JSON-LD are valid under CSP',()=>{
 });
 test('catalog data is unique and every image variant exists locally',()=>{
   const c={window:{}};vm.createContext(c);for(const f of ['products.js','image-manifest.js'])vm.runInContext(read(f),c);
-  const p=c.window.GLAM_PRODUCTS;assert.equal(p.length,65);assert.equal(p.filter(x=>!x.hidden).length,57);assert.equal(new Set(p.map(x=>x.sku)).size,p.length);
+  const p=c.window.GLAM_PRODUCTS;assert.equal(p.length,63);assert.equal(p.filter(x=>!x.hidden).length,55);assert.equal(new Set(p.map(x=>x.sku)).size,p.length);
   for(const x of p){assert.ok(Number.isSafeInteger(x.price)&&x.price>0);for(const sku of x.groupSkus||[])assert.ok(p.some(x=>x.sku===sku));for(const url of [x.image,...Object.values(x.variantImages||{}),...Object.values(x.colorPhotos||{})]){assert.ok(c.window.GLAM_IMAGES[url]);assert.ok(fs.existsSync(path.join(root,url)));}}
   for(const item of Object.values(c.window.GLAM_IMAGES))for(const variant of item.srcset.split(', '))assert.ok(fs.existsSync(path.join(root,variant.split(' ')[0])));
 });

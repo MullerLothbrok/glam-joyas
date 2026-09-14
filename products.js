@@ -97,8 +97,13 @@ window.GLAM_PRODUCTS = [
     "price": 85000,
     "stock": "En stock",
     "material": "",
-    "variants": [],
-    "image": "/assets/optimized/41e65220ac7d-960.webp"
+    "variants": [
+      "Plateado",
+      "Dorado",
+      "Rosé"
+    ],
+    "image": "/assets/optimized/41e65220ac7d-960.webp",
+    "variantLabel": "Elegí el acabado"
   },
   {
     "sku": "GJ-W008",
@@ -235,8 +240,12 @@ window.GLAM_PRODUCTS = [
     "price": 95000,
     "stock": "En stock",
     "material": "",
-    "variants": [],
-    "image": "/assets/optimized/fdd26812e205-480.webp"
+    "variants": [
+      "Gold",
+      "Plateado"
+    ],
+    "image": "/assets/optimized/fdd26812e205-480.webp",
+    "variantLabel": "Elegí el acabado"
   },
   {
     "sku": "GJ-W032",
@@ -255,18 +264,24 @@ window.GLAM_PRODUCTS = [
     "price": 100000,
     "stock": "En stock",
     "material": "",
-    "variants": [],
-    "image": "/assets/optimized/5d7d4ebb95b9-960.webp"
+    "variants": [
+      "Dorado",
+      "Plateado"
+    ],
+    "image": "/assets/optimized/5d7d4ebb95b9-960.webp",
+    "variantLabel": "Elegí el acabado"
   },
   {
     "sku": "GJ-W018",
     "name": "Aros punto luz",
     "category": "Aros y earcuffs",
     "price": 60000,
-    "stock": "En stock",
+    "stock": "Consultar disponibilidad por tamaño",
     "material": "",
     "variants": [],
-    "image": "/assets/optimized/636f60ee1840-960.webp"
+    "image": "/assets/optimized/636f60ee1840-960.webp",
+    "consultOnly": true,
+    "priceNote": "Precio original desde Gs. 60.000. El precio varía según el tamaño. Consultá disponibilidad y precio de cada tamaño por WhatsApp."
   },
   {
     "sku": "GJ-W020",
@@ -389,16 +404,6 @@ window.GLAM_PRODUCTS = [
     "image": "/assets/optimized/da8701ab9277-960.webp"
   },
   {
-    "sku": "GJ-W002",
-    "name": "Collar de piedras",
-    "category": "Collares y cadenas",
-    "price": 240000,
-    "stock": "En stock",
-    "material": "",
-    "variants": [],
-    "image": "/assets/optimized/cfbc0ea13da2-960.webp"
-  },
-  {
     "sku": "GJ-N001",
     "name": "Collar de piedras con colgante ovalado",
     "category": "Collares y cadenas",
@@ -408,16 +413,14 @@ window.GLAM_PRODUCTS = [
     "variants": [
       "Rojo",
       "Verde / Pastel",
-      "Violeta",
-      "Ónix negro"
+      "Violeta"
     ],
     "image": "/assets/optimized/e0b95801c75b-960.webp",
     "variantLabel": "Elegí el color",
     "variantImages": {
       "Rojo": "/assets/optimized/e0b95801c75b-960.webp",
       "Verde / Pastel": "/assets/optimized/80d42fe74a6d-480.webp",
-      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp",
-      "Ónix negro": "/assets/optimized/7c2d84c6b7ad-960.webp"
+      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp"
     },
     "hidden": true
   },
@@ -430,16 +433,6 @@ window.GLAM_PRODUCTS = [
     "material": "",
     "variants": [],
     "image": "/assets/optimized/1f1edf683f3c-960.webp"
-  },
-  {
-    "sku": "GJ-W001",
-    "name": "Collar plateado con piedras",
-    "category": "Collares y cadenas",
-    "price": 300000,
-    "stock": "En stock",
-    "material": "",
-    "variants": [],
-    "image": "/assets/optimized/275fce5b0dc5-960.webp"
   },
   {
     "sku": "GJ-N004",
@@ -463,11 +456,33 @@ window.GLAM_PRODUCTS = [
       "B",
       "C",
       "D",
-      "E"
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "Ñ",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
     ],
     "image": "/assets/optimized/061d04882dd1-960.webp",
     "variantLabel": "Elegí la inicial",
-    "variantSummary": "Iniciales A / B / C / D / E"
+    "variantSummary": "Todas las iniciales · A–Z, incluida Ñ"
   },
   {
     "sku": "GJ-W003",
@@ -516,8 +531,7 @@ window.GLAM_PRODUCTS = [
     "variantImages": {
       "Rojo": "/assets/optimized/e0b95801c75b-960.webp",
       "Verde / Pastel": "/assets/optimized/80d42fe74a6d-480.webp",
-      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp",
-      "Ónix negro": "/assets/optimized/7c2d84c6b7ad-960.webp"
+      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp"
     },
     "hidden": true
   },
@@ -538,8 +552,7 @@ window.GLAM_PRODUCTS = [
     "variantImages": {
       "Rojo": "/assets/optimized/e0b95801c75b-960.webp",
       "Verde / Pastel": "/assets/optimized/80d42fe74a6d-480.webp",
-      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp",
-      "Ónix negro": "/assets/optimized/7c2d84c6b7ad-960.webp"
+      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp"
     },
     "hidden": true
   },
@@ -570,8 +583,13 @@ window.GLAM_PRODUCTS = [
     "price": 75000,
     "stock": "En stock",
     "material": "",
-    "variants": [],
-    "image": "/assets/optimized/61165b60e028-960.webp"
+    "variants": [
+      "Corazón",
+      "Perla",
+      "Estrella"
+    ],
+    "image": "/assets/optimized/61165b60e028-960.webp",
+    "variantLabel": "Elegí el modelo"
   },
   {
     "sku": "GJ-W017",
@@ -590,8 +608,14 @@ window.GLAM_PRODUCTS = [
     "price": 180000,
     "stock": "En stock",
     "material": "Laminado en oro",
-    "variants": [],
-    "image": "/assets/optimized/a755d08d0976-480.webp"
+    "variants": [
+      "Izquierda",
+      "Medio",
+      "Derecha"
+    ],
+    "image": "/assets/optimized/a755d08d0976-480.webp",
+    "variantLabel": "Elegí el modelo",
+    "variantSummary": "Izquierda / Medio / Derecha, según la foto"
   },
   {
     "sku": "GJ-W025",
@@ -600,8 +624,12 @@ window.GLAM_PRODUCTS = [
     "price": 130000,
     "stock": "En stock",
     "material": "",
-    "variants": [],
-    "image": "/assets/optimized/eb3928b6dc00-960.webp"
+    "variants": [
+      "Rosé",
+      "Plateado"
+    ],
+    "image": "/assets/optimized/eb3928b6dc00-960.webp",
+    "variantLabel": "Elegí el acabado"
   },
   {
     "sku": "GJ-W026",
@@ -622,12 +650,13 @@ window.GLAM_PRODUCTS = [
   },
   {
     "sku": "GJ-N020",
-    "name": "Pulsera brillante y dorada",
+    "name": "Pulsera brillante",
     "category": "Pulseras y brazaletes",
     "price": 180000,
     "stock": "En stock",
-    "material": "Dorado y circones",
-    "variants": [],
+    "material": "Circones",
+    "variants": ["Gold", "Plateado"],
+    "variantLabel": "Elegí el acabado",
     "image": "/assets/optimized/fd2712c164d6-480.webp"
   },
   {
@@ -750,14 +779,12 @@ window.GLAM_PRODUCTS = [
     "colors": [
       "Rojo",
       "Verde / Pastel",
-      "Violeta",
-      "Ónix negro"
+      "Violeta"
     ],
     "colorPhotos": {
       "Rojo": "/assets/optimized/e0b95801c75b-960.webp",
       "Verde / Pastel": "/assets/optimized/80d42fe74a6d-480.webp",
-      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp",
-      "Ónix negro": "/assets/optimized/7c2d84c6b7ad-960.webp"
+      "Violeta": "/assets/optimized/ef1ea4ef7992-480.webp"
     },
     "groupSkus": [
       "GJ-N001",

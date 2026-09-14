@@ -12,7 +12,7 @@
     if (separator < 0) return null;
     const sku = cartKey.slice(0, separator), variant = cartKey.slice(separator + 2);
     const product = products.find(p => p.sku === sku);
-    if (!product || !Number.isSafeInteger(product.price) || product.price <= 0) return null;
+    if (!product || product.consultOnly || !Number.isSafeInteger(product.price) || product.price <= 0) return null;
     if (product.groupSkus?.length && !product.groupSkus.includes(sku)) return null;
     const variants = product.variants || [];
     if (variants.length ? !variants.includes(variant) : variant !== '') return null;
@@ -26,6 +26,13 @@
       result[cartKey] = Math.min(quantity, maxQuantity);
     }
     return result;
+  }
+  function addSet(input, members, variant, products, maxQuantity = 99) {
+    const cart = sanitize(input, products, maxQuantity);
+    const keys = members.map(product => key(product, variant));
+    if (!keys.length || new Set(keys).size !== keys.length || keys.some(k => !resolve(k, products) || (cart[k] || 0) >= maxQuantity)) return null;
+    for (const k of keys) cart[k] = (cart[k] || 0) + 1;
+    return cart;
   }
   function read(storage, products, maxQuantity = 99) {
     try {
@@ -69,5 +76,5 @@
     lines.push('', '¿Me confirman disponibilidad, entrega y forma de pago?');
     return lines.join('\n');
   }
-  return Object.freeze({key, resolve, sanitize, read, discountedPrice, summarize, message});
+  return Object.freeze({key, resolve, sanitize, addSet, read, discountedPrice, summarize, message});
 });
