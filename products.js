@@ -485,16 +485,6 @@ window.GLAM_PRODUCTS = [
     "variantSummary": "Todas las iniciales · A–Z, incluida Ñ"
   },
   {
-    "sku": "GJ-W003",
-    "name": "Brazaletes dorados",
-    "category": "Pulseras y brazaletes",
-    "price": 140000,
-    "stock": "En stock",
-    "material": "",
-    "variants": [],
-    "image": "/assets/optimized/5b96c5aa8b86-960.webp"
-  },
-  {
     "sku": "GJ-W029",
     "name": "Esclava Gold con circones",
     "category": "Pulseras y brazaletes",
