@@ -8,7 +8,10 @@ window.GLAM_PRODUCTS = [
     "stock": "En stock",
     "material": "Plata 925 con baño de oro blanco",
     "variants": [],
-    "image": "/assets/optimized/816238bd7cb7-480.webp"
+    "image": "/assets/optimized/816238bd7cb7-480.webp",
+    "available": true,
+    "archived": false,
+    "optionAvailability": {}
   },
   {
     "sku": "GJ-N016",
@@ -645,7 +648,10 @@ window.GLAM_PRODUCTS = [
     "price": 180000,
     "stock": "En stock",
     "material": "Circones",
-    "variants": ["Gold", "Plateado"],
+    "variants": [
+      "Gold",
+      "Plateado"
+    ],
     "variantLabel": "Elegí el acabado",
     "image": "/assets/optimized/fd2712c164d6-480.webp"
   },
