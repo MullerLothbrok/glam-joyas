@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://glamjoyas.store/sitemap.xml
+
+Disallow: /admin
+Disallow: /api/

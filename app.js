@@ -7,6 +7,9 @@ const G = product => (product.groupSkus || []).map(sku => P.find(p => p.sku === 
 const config = window.GLAM_CONFIG, core = window.GLAM_CART;
 const sale = product => core.discountedPrice(product, config.promotionRate);
 const key = core.key;
+const inStock = (p,v='') => core.isAvailable(p,v,P);
+const hasStock = p => !p.archived && (G(p).length ? G(p).some(x => inStock(x) && (!V(x).length || V(x).some(v=>inStock(x,v)))) : inStock(p) && (!V(p).length || V(p).some(v=>inStock(p,v))));
+function stockButton(product,variant='') {const enabled=inStock(product,variant);Q('#ma').disabled=!enabled;Q('#ma').textContent=enabled?'Agregar al carrito':'Agotado';Q('#mst').textContent=enabled?'En stock':'Agotado';}
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 const percent = Math.round(config.promotionRate * 100);
 let storage;
@@ -24,7 +27,7 @@ function save() {
 function imageFor(product, variant) { return product.variantImages?.[variant] || product.image; }
 function imageTag(src, alt, sizes = '(max-width: 850px) 45vw, 400px', lazy = true) {
   const info = window.GLAM_IMAGES[src];
-  if (!info) return '<div class="ph">Foto en actualización</div>';
+  if (!info) return /^\/assets\/catalog\/[a-f0-9]{64}\.jpg$/.test(src) ? '<img src="'+escapeHTML(src)+'" alt="'+escapeHTML(alt)+'" '+(lazy?'loading="lazy"':'')+' decoding="async">' : '<div class="ph">Foto en actualización</div>';
   return `<img src="${escapeHTML(src)}" srcset="${escapeHTML(info.srcset)}" sizes="${escapeHTML(sizes)}" width="${info.width}" height="${info.height}" alt="${escapeHTML(alt)}" ${lazy ? 'loading="lazy"' : ''} decoding="async">`;
 }
 function setPanel(panel) {
@@ -81,7 +84,7 @@ function groupMin(product) { const members = G(product); return members.length ?
 function groupMax(product) { const members = G(product); return members.length ? Math.max(...members.map(p => p.price)) : product.price; }
 function filt() {
   const query = Q('#s').value.toLowerCase(), category = Q('#c').value;
-  const products = P.filter(p => !p.hidden && (!category || p.category === category || G(p).some(x => x.category === category)) && (!query || searchText(p).includes(query)));
+  const products = P.filter(p => !p.hidden && !p.archived && (!category || p.category === category || G(p).some(x => x.category === category)) && (!query || searchText(p).includes(query)));
   const order = Q('#sort').value;
   if (order === 'low') products.sort((a,b) => groupMin(a) - groupMin(b));
   else if (order === 'high') products.sort((a,b) => groupMax(b) - groupMax(a));
@@ -105,37 +108,37 @@ function render() {
   Q('#count').textContent = products.length + (products.length === 1 ? ' pieza' : ' piezas');
   Q('#grid').innerHTML = products.map(product => {
     const grouped = G(product).length, choices = grouped || V(product).length;
-    return `<article class="card"><button class="pic" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">${imageTag(product.image,product.name)}</button><div class="meta">${escapeHTML(product.category)}</div><div class="row"><h3>${escapeHTML(product.name)}</h3><div class="price">${priceLabel(product)}</div></div><div class="sku">${choices ? choices + (grouped ? ' modelos · ' : ' opciones · ') : escapeHTML(product.sku)}${escapeHTML(optionLabel(product))}</div>${product.priceNote ? `<p class="price-note">${escapeHTML(product.priceNote)}</p>` : ''}<div class="buttons"><button class="add" data-add="${escapeHTML(product.sku)}">${product.consultOnly ? 'Consultar tamaños' : choices ? 'Elegir opción' : 'Agregar al carrito'}</button><button class="view" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">Ver</button></div></article>`;
+    return `<article class="card"><button class="pic" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">${imageTag(product.image,product.name)}</button><div class="meta">${escapeHTML(product.category)}</div><div class="row"><h3>${escapeHTML(product.name)}</h3><div class="price">${priceLabel(product)}</div></div><div class="sku">${choices ? choices + (grouped ? ' modelos · ' : ' opciones · ') : escapeHTML(product.sku)}${escapeHTML(optionLabel(product))}</div>${product.priceNote ? `<p class="price-note">${escapeHTML(product.priceNote)}</p>` : ''}<div class="buttons"><button class="add" ${hasStock(product)?'':'disabled'} data-add="${escapeHTML(product.sku)}">${!hasStock(product) ? 'Agotado' : product.consultOnly ? 'Consultar tamaños' : choices ? 'Elegir opción' : 'Agregar al carrito'}</button><button class="view" data-detail="${escapeHTML(product.sku)}" aria-label="Ver ${escapeHTML(product.name)}">Ver</button></div></article>`;
   }).join('') || '<p class="empty-results">No encontramos piezas con esos filtros. Probá otra búsqueda.</p>';
 }
 function quickAdd(sku) {
   const product = P.find(p => p.sku === sku);
-  if (!product) return;
+  if (!product || product.archived) return;
   if (product.consultOnly || G(product).length || V(product).length) return detail(sku);
   add(product);
 }
 function setGroupChoice(product) {
   Q('#mpr').innerHTML = priceLabel(product, true);
   Q('#msku').textContent = product.sku;
-  Q('#mmat').textContent = product.material || 'Consultar'; Q('#mst').textContent = product.stock || 'Consultar';
+  Q('#mmat').textContent = product.material || 'Consultar'; Q('#mst').textContent = inStock(product) ? (product.stock || 'En stock') : 'Agotado';
   Q('#mp').innerHTML = imageTag(product.image, product.name, '(max-width: 850px) 100vw, 50vw', false);
 }
 function detail(sku) {
-  active = P.find(p => p.sku === sku); if (!active) return;
+  active = P.find(p => p.sku === sku); if (!active || active.archived) return;
   Q('#stoneColorBlock')?.remove();
   const members = G(active), variants = V(active), selected = members.length ? members[0] : active;
-  Q('#mcat').textContent = active.category; Q('#mn').textContent = active.name; setGroupChoice(selected);
+  Q('#mcat').textContent = active.category; Q('#mn').textContent = active.name; setGroupChoice(selected); stockButton(selected,V(selected)[0]||'');
   Q('#vb').hidden = !(members.length || variants.length);
   const select = Q('#v');
   if (members.length) {
     Q('#vb label').textContent = active.groupSelectLabel || 'Elegí el modelo';
     select.innerHTML = members.map(p => `<option value="${escapeHTML(p.sku)}">${escapeHTML(cleanGroupName(active,p))} — ${M(sale(p))}</option>`).join('');
-    select.onchange = () => setGroupChoice(P.find(p => p.sku === select.value));
+    select.onchange = () => {const chosen=P.find(p=>p.sku===select.value);setGroupChoice(chosen);stockButton(chosen);};
     Q('#ma').onclick = () => add(P.find(p => p.sku === select.value));
   } else {
     Q('#vb label').textContent = active.variantLabel || 'Elegí una opción';
-    select.innerHTML = variants.map(v => `<option>${escapeHTML(v)}</option>`).join('');
-    select.onchange = () => {Q('#mp').innerHTML = imageTag(imageFor(active,select.value), active.name, '(max-width: 850px) 100vw, 50vw', false);};
+    select.innerHTML = variants.map(v => `<option value="${escapeHTML(v)}">${escapeHTML(v)}${inStock(active,v)?'':' · Agotado'}</option>`).join('');
+    select.onchange = () => {stockButton(active,select.value);Q('#mp').innerHTML = imageTag(imageFor(active,select.value), active.name, '(max-width: 850px) 100vw, 50vw', false);};
     Q('#ma').onclick = () => add(active, variants.length ? select.value : '');
   }
   if (active.stoneCollection) setupStones(active);
@@ -158,6 +161,10 @@ function setupStones(collection) {
       Q('#mpr').innerHTML = `<span class="sale-price">${M(setPrice())}</span> <del>${M(base)}</del>`;
       Q('#msku').textContent = available().map(p => p.sku).join(' + ');
     } else setGroupChoice(P.find(p => p.sku === Q('#v').value));
+    const color=Q('#stoneColor').value;
+    const selectedPiece=P.find(p=>p.sku===Q('#v').value);
+    const enabled=Q('#v').value==='complete-set' ? available().length===3&&available().every(p=>inStock(p,color)) : inStock(selectedPiece,color);
+    Q('#ma').disabled=!enabled;Q('#ma').textContent=enabled?'Agregar al carrito':'Agotado';Q('#mst').textContent=enabled?'En stock':'Agotado';
     Q('#mp').innerHTML = imageTag(collection.colorPhotos[Q('#stoneColor').value], 'Colección de piedras · ' + Q('#stoneColor').value, '(max-width: 850px) 100vw, 50vw', false);
   }
   function chooseColor() {
@@ -215,7 +222,7 @@ document.addEventListener('keydown', event => {
   if (event.shiftKey && (document.activeElement === first || !openPanel.contains(document.activeElement))) {event.preventDefault(); last?.focus();}
   else if (!event.shiftKey && (document.activeElement === last || !openPanel.contains(document.activeElement))) {event.preventDefault(); first?.focus();}
 });
-[...new Set(P.filter(p => !p.hidden).map(p => p.category))].sort().forEach(category => {const option = document.createElement('option'); option.textContent = category; Q('#c').append(option);});
+[...new Set(P.filter(p => !p.hidden && !p.archived).map(p => p.category))].sort().forEach(category => {const option = document.createElement('option'); option.textContent = category; Q('#c').append(option);});
 Q('#s').oninput = () => render(); Q('#c').onchange = () => render(); Q('#sort').onchange = () => render();
 Q('#bag').onclick = openD; Q('#xd').onclick = closeD; Q('#xm').onclick = closeM; Q('#o').onclick = closeAll; Q('#wa').onclick = checkout;
 Q('#invoice').onchange = event => {Q('#invoiceFields').classList.toggle('on',event.target.checked); Q('#invoiceFields').hidden = !event.target.checked;};

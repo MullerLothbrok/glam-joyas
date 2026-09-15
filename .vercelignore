@@ -4,8 +4,6 @@ node_modules
 tests
 tools
 README.md
-package.json
-package-lock.json
 typography-preview.html
 redeploy-checkout-v2.txt
 launch

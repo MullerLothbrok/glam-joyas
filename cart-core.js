@@ -6,13 +6,20 @@
 })(typeof window === 'undefined' ? globalThis : window, function () {
   'use strict';
   const key = (product, variant = '') => product.sku + '::' + variant;
+  function isAvailable(product, variant = '', products = []) {
+    if (!product || product.archived || product.available === false || product.optionAvailability?.[variant] === false) return false;
+    const parents = products.filter(p => p !== product && p.groupSkus?.includes(product.sku));
+    if (parents.some(p => p.archived || (!p.groupSkus.includes(p.sku) && p.available === false) || p.optionAvailability?.[variant] === false)) return false;
+    if (product.hidden && !parents.length) return false;
+    return true;
+  }
   function resolve(cartKey, products) {
     if (typeof cartKey !== 'string') return null;
     const separator = cartKey.indexOf('::');
     if (separator < 0) return null;
     const sku = cartKey.slice(0, separator), variant = cartKey.slice(separator + 2);
     const product = products.find(p => p.sku === sku);
-    if (!product || product.consultOnly || !Number.isSafeInteger(product.price) || product.price <= 0) return null;
+    if (!isAvailable(product, variant, products) || product.consultOnly || !Number.isSafeInteger(product.price) || product.price <= 0) return null;
     if (product.groupSkus?.length && !product.groupSkus.includes(sku)) return null;
     const variants = product.variants || [];
     if (variants.length ? !variants.includes(variant) : variant !== '') return null;
@@ -76,5 +83,5 @@
     lines.push('', '¿Me confirman disponibilidad, entrega y forma de pago?');
     return lines.join('\n');
   }
-  return Object.freeze({key, resolve, sanitize, addSet, read, discountedPrice, summarize, message});
+  return Object.freeze({key, isAvailable, resolve, sanitize, addSet, read, discountedPrice, summarize, message});
 });
