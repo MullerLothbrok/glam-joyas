@@ -66,6 +66,9 @@
   "functions": {
     "api/admin.js": {
       "maxDuration": 60
+    },
+    "api/local.js": {
+      "maxDuration": 60
     }
   }
 }

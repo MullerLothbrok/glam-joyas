@@ -1,0 +1,25 @@
+const test=require('node:test'),assert=require('node:assert/strict');
+const L=require('../lib/local-catalog.cjs'),S=require('../lib/admin-security.cjs'),C=require('../lib/admin-catalog.cjs'),{createHandler}=require('../api/local.js');
+const env={GLAM_GITHUB_CLIENT_ID:'test',GLAM_GITHUB_CLIENT_SECRET:'test-only'},key=S.configuration(env).key;
+const cookie=S.SESSION+'='+S.seal({uid:S.OWNER_ID,token:'test',csrf:'csrf',exp:Date.now()+60000},key,'session');
+async function invoke(action,headers={},body,method='GET',gh=async()=>({id:S.OWNER_ID})){const res={headers:{},setHeader(k,v){this.headers[k]=v;},end(v){this.body=v;}};await createHandler({env,gh})({url:'/api/local?action='+action,headers,body,method},res);return res;}
+test('private endpoints reject anonymous and cross-origin requests',async()=>{for(const action of ['list','photo','save','publish'])assert.equal((await invoke(action,{},undefined,['save','publish'].includes(action)?'POST':'GET')).statusCode,401);for(const action of ['save','publish'])assert.equal((await invoke(action,{cookie,origin:'https://wrong.test','x-glam-csrf':'csrf'},{},'POST')).statusCode,403);});
+test('private storage refuses public repositories and another owner',async()=>{for(const repo of [{private:false,owner:{id:S.OWNER_ID}},{private:true,owner:{id:1}}])await assert.rejects(L.read(async()=>repo,'t'),e=>e.status===403);});
+const privateRoot='/repos/'+L.PRIVATE_REPO,publicRoot='/repos/'+S.REPO;
+const product={sku:'LOCAL-01',name:'Joya privada',category:'Anillos',price:95000,variants:[],available:true,archived:false,optionAvailability:{},image:'/assets/catalog/photo.jpg',photoSha:'photo'};
+function mock({privateProducts=[product],publicProducts=[{sku:'PUBLIC-01',name:'Pública',category:'Anillos',price:100000,variants:[],image:'/assets/a.jpg'}]}={}){const writes=[];return {writes,gh:async(t,path,method='GET',body)=>{if(method!=='GET'){writes.push({path,method,body});return {sha:'b'.repeat(40)};}if(path===privateRoot)return {private:true,owner:{id:S.OWNER_ID},default_branch:'main'};if(path.endsWith('/git/ref/heads/main'))return {object:{sha:'a'.repeat(40)}};if(path.includes('/git/commits/'))return {tree:{sha:'tree'}};if(path.includes('/git/trees/'))return {tree:[{path:path.startsWith(privateRoot)?'catalog.json':'products.js',sha:'catalog',type:'blob'}]};if(path.endsWith('/git/blobs/catalog'))return {content:Buffer.from(path.startsWith(privateRoot)?JSON.stringify(privateProducts):C.serialize(publicProducts)).toString('base64')};throw Error('Unexpected '+path);}};}
+test('saving private product only writes private repository and keeps photograph',async()=>{const m=mock();const result=await L.save(m.gh,'t',{baseSha:'a'.repeat(40),product:{...product,name:'Nuevo nombre',price:110000}});assert.equal(result.products[0].price,110000);assert.equal(result.products[0].photoSha,'photo');assert.ok(m.writes.length);assert.ok(m.writes.every(x=>x.path.startsWith(privateRoot+'/')));assert.equal(m.writes.at(-1).body.force,false);});
+test('stale saves and duplicate public codes never write',async()=>{let m=mock();await assert.rejects(L.save(m.gh,'t',{baseSha:'old',product}),e=>e.status===409);assert.equal(m.writes.length,0);m=mock({publicProducts:[product]});await assert.rejects(L.save(m.gh,'t',{baseSha:'a'.repeat(40),product}),e=>e.status===409);assert.equal(m.writes.length,0);});
+test('publication rejects stale public state or already published items',async()=>{let m=mock();await assert.rejects(L.publish(m.gh,'t',{baseSha:'a'.repeat(40),publicSha:'old',sku:product.sku}),e=>e.status===409);assert.equal(m.writes.length,0);m=mock({publicProducts:[product]});await assert.rejects(L.publish(m.gh,'t',{baseSha:'a'.repeat(40),publicSha:'a'.repeat(40),sku:product.sku}),e=>e.status===409);assert.equal(m.writes.length,0);});
+test('private photo lookup cannot choose arbitrary repository blobs',async()=>{const m=mock();await assert.rejects(L.image(m.gh,'t',{products:[product]},'../../secret'),e=>e.status===404);});
+test('explicit publication copies only the chosen private product into public catalog',async()=>{
+ const other={...product,sku:'LOCAL-02',name:'Debe seguir privada'};const m=mock({privateProducts:[product,other]});
+ // Minimal SOF0 JPEG header fixture for the image validator; no live files or credentials.
+ const jpeg=Buffer.from([255,216,255,192,0,17,8,0,1,0,1,3,1,17,0,2,17,0,3,17,0,255,217]);
+ const gh=async(t,p,method,body)=>p===privateRoot+'/git/blobs/photo'?{content:jpeg.toString('base64')}:m.gh(t,p,method,body);
+ const result=await L.publish(gh,'t',{baseSha:'a'.repeat(40),publicSha:'a'.repeat(40),sku:product.sku});
+ assert.ok(result.products.some(p=>p.sku===product.sku));assert.ok(!result.products.some(p=>p.sku===other.sku));
+ assert.ok(m.writes.every(x=>x.path.startsWith(publicRoot+'/')));
+ const tree=m.writes.find(x=>x.path.endsWith('/git/trees'));const content=tree.body.tree.find(x=>x.path==='products.js').content;
+ assert.doesNotMatch(content,/photoSha|Debe seguir privada|LOCAL-02/);assert.equal(m.writes.at(-1).body.force,false);
+});
