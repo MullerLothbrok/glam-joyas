@@ -35,7 +35,8 @@ window.GLAM_PRODUCTS = [
     "stock": "En stock",
     "material": "Baño dorado y circón",
     "variants": [],
-    "image": "/assets/optimized/078582b654f9-960.webp"
+    "image": "/assets/optimized/078582b654f9-960.webp",
+    "hidden": true
   },
   {
     "sku": "GJ-N014",
@@ -55,7 +56,8 @@ window.GLAM_PRODUCTS = [
     "stock": "En stock",
     "material": "Baño dorado y circones",
     "variants": [],
-    "image": "/assets/optimized/078582b654f9-960.webp"
+    "image": "/assets/optimized/078582b654f9-960.webp",
+    "hidden": true
   },
   {
     "sku": "GJ-N009",
@@ -314,7 +316,8 @@ window.GLAM_PRODUCTS = [
     "stock": "En stock",
     "material": "Plata bañada en oro",
     "variants": [],
-    "image": "/assets/optimized/3ddffd790d46-480.webp"
+    "image": "/assets/optimized/3ddffd790d46-480.webp",
+    "hidden": true
   },
   {
     "sku": "GJ-W027",
@@ -384,7 +387,8 @@ window.GLAM_PRODUCTS = [
     "stock": "En stock",
     "material": "Plata bañada en oro",
     "variants": [],
-    "image": "/assets/optimized/3ddffd790d46-480.webp"
+    "image": "/assets/optimized/3ddffd790d46-480.webp",
+    "hidden": true
   },
   {
     "sku": "GJ-W024",
@@ -789,5 +793,39 @@ window.GLAM_PRODUCTS = [
     ],
     "groupLabel": "Elegí el color y la pieza",
     "stoneCollection": true
+  },
+  {
+    "sku": "GJ-ANILLOS-CIRCONES",
+    "name": "Anillos dorados con circones",
+    "category": "Anillos",
+    "price": 135000,
+    "stock": "En stock",
+    "material": "Baño dorado y circón",
+    "variants": [],
+    "image": "/assets/optimized/078582b654f9-960.webp",
+    "groupSkus": [
+      "GJ-N010",
+      "GJ-N011"
+    ],
+    "groupLabel": "Circón central / Flor",
+    "groupSelectLabel": "Elegí la pieza",
+    "priceNote": "Precio por pieza. Elegí el anillo que querés pedir."
+  },
+  {
+    "sku": "GJ-CADENAS-FLOR-BAGUETTE",
+    "name": "Cadenas de florcitas y baguette",
+    "category": "Collares y cadenas",
+    "price": 270000,
+    "stock": "En stock",
+    "material": "Plata bañada en oro",
+    "variants": [],
+    "image": "/assets/optimized/3ddffd790d46-480.webp",
+    "groupSkus": [
+      "GJ-N006",
+      "GJ-N007"
+    ],
+    "groupLabel": "Florcitas / Baguette",
+    "groupSelectLabel": "Elegí la pieza",
+    "priceNote": "Precio por pieza. Elegí Florcitas o Baguette. El collar inferior con colgante no está incluido."
   }
 ];
